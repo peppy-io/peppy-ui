@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import Error from '../components/Error.svelte';
 	import ApiResp from '../components/ApiResp.svelte';
 	import * as EmailValidator from 'email-validator';
@@ -10,12 +11,18 @@
 	let passwordConf = '';
 	let errors = [];
 	let resp = null;
+
+	function success(_: Response) {
+		goto('/login');
+	}
+
 	function signUp() {
-                console.log(username, email, password, passwordConf);
+		console.log(username, email, password, passwordConf);
 		errors = [];
 		if (password !== passwordConf) {
 			errors = [...errors, 'Passwords do not match'];
-		} else if (!EmailValidator.validate(email)) {
+		}
+		if (!EmailValidator.validate(email)) {
 			errors = [...errors, 'Invalid email!'];
 		}
 
@@ -29,14 +36,9 @@
 				},
 				body: JSON.stringify({ username, email, password })
 			});
-
-			/* username = ''; */
-			/* email = ''; */
-			/* password = ''; */
-			/* passwordConf = ''; */
 		}
 
-                return false;
+		return false;
 	}
 </script>
 
@@ -105,7 +107,7 @@
 
 			<Error {errors} />
 
-                        <ApiResp prom={resp}/>
+			<ApiResp prom={resp} callback={success} />
 
 			<div>
 				<button

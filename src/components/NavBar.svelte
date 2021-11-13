@@ -1,3 +1,7 @@
+<script>
+	import { token } from '../globals';
+</script>
+
 <!-- source: https://v1.tailwindcss.com/components/navigation#responsive-header -->
 <nav class="flex items-center justify-between flex-wrap bg-teal-500 p-6">
 	<div class="flex items-center flex-shrink-0 text-white mr-6">
@@ -21,11 +25,19 @@
 			</a>
 		</div>
 		<div>
+                        {#if $token === ""}
 			<a
 				href="/login"
 				class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black-900 hover:bg-blue-400 mt-4 lg:mt-0 transition-all duration-200"
 				>Login</a
 			>
+                        {:else}
+			<a
+				href="/logout"
+				class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black-900 hover:bg-blue-400 mt-4 lg:mt-0 transition-all duration-200"
+				>Logout</a
+			>
+                        {/if}
 		</div>
 	</div>
 </nav>
