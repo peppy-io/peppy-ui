@@ -189,7 +189,6 @@
 <style>
 	.illus {
 		width: 40%;
-		min-height: 20em;
 		background-color: #ffffffdd;
 		color: #000;
 		@apply rounded-xl;
