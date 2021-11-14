@@ -82,7 +82,7 @@
 
 			<div class="flex items-center justify-between">
 				<div class="text-sm">
-					<a href="/signup" class="font-medium text-indigo-300 hover:text-indigo-100">
+					<a sveltekit:prefetch href="/signup" class="font-medium text-indigo-300 hover:text-indigo-100">
 						Sign up instead?
 					</a>
 				</div>
