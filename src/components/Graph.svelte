@@ -68,12 +68,17 @@
 			const lineData = [];
 			labels = [];
 			let energy = 0;
+			let lastDay = 0;
 			resp.forEach((log) => {
 				let dt = DateTime.fromISO(toISO(log.timestamp), { setZone: true }).setZone(
 					Settings.defaultZone,
 					{ keepLocalTime: true }
 				);
 				labels.push(dt);
+				if (dt.day != lastDay) {
+					energy = 0;
+					lastDay = dt.day;
+				}
 				energy += log.energy_level;
 				lineData.push(energy);
 			});
