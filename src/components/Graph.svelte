@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getReq } from '../helpers';
-	import { Chart, registerables } from 'chart.js';
+	import { Chart, registerables } from 'chart.js/dist/chart.esm';
 	import 'chartjs-adapter-luxon';
 	import ChartDataLabels from 'chartjs-plugin-datalabels';
 	import { Line } from 'svelte-chartjs';

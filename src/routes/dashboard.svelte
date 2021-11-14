@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { token } from '../globals';
 	import { goto } from '$app/navigation';
-	import { Chart, registerables } from 'chart.js';
+	import { Chart, registerables } from 'chart.js/dist/chart.esm';
 	import 'chartjs-adapter-luxon';
 	import ChartDataLabels from 'chartjs-plugin-datalabels';
 	import LogForm from '../components/LogForm.svelte';
