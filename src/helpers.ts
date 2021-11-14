@@ -28,5 +28,5 @@ export async function getReq(endpoint: string): Promise<Response> {
     }
   });
 
-  return resp.json();
+  return resp;
 }

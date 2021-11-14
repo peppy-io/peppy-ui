@@ -2,18 +2,23 @@
 	import { token } from '../globals';
 	import { getReq } from '../helpers';
 	import { goto } from '$app/navigation';
+	import { Chart, registerables } from 'chart.js';
+	import 'chartjs-adapter-luxon';
 	import { Line } from 'svelte-chartjs';
 	import ApiResp from '../components/ApiResp.svelte';
 	import LogForm from '../components/LogForm.svelte';
+	import { DateTime } from 'luxon';
+
+	Chart.register(...registerables);
 
 	// TODO: validate token from backend here
 	if ($token === '') {
 		goto('/login');
 	}
 
-        let prom = getReq('/energyLevels/day');
+	let prom = getReq('/energyLevels/day');
 
-	const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
+	let labels = [];
 	const data = {
 		labels: labels,
 		datasets: [
@@ -37,8 +42,28 @@
 		]
 	};
 
-        const fontSize = 15;
-        const fontColor = 'white';
+        // converts "2021-11-14 07:30:00 +0530" to "2021-11-14T07:30:00+0530"
+	function toISO(timestamp: string) {
+		return timestamp.replace(' ', 'T').replace(' ', '');
+	}
+
+	prom.then(async (resp: any) => {
+		resp = await resp.json();
+		const lineData = [];
+		resp.forEach((log) => {
+			console.log(log);
+			labels.push(DateTime.fromISO(toISO(log.timestamp)));
+			lineData.push(log.energy_level);
+		});
+
+		data.labels = labels;
+		data.datasets[0].data = lineData;
+		data.datasets[1].data = Array(lineData.length).fill(0);
+		console.log(data);
+	});
+
+	const fontSize = 15;
+	const fontColor = 'white';
 
 	const options = {
 		responsive: true,
@@ -47,13 +72,16 @@
 				ticks: {
 					color: fontColor
 				},
-
 				font: {
 					size: fontSize
 				},
 				title: {
 					color: fontColor
-				}
+				},
+				type: 'time',
+				/* time: { */
+				/* 	unit: 'hour' */
+				/* } */
 			},
 			y: {
 				ticks: {
@@ -99,7 +127,7 @@
 
 	<Line {data} {options} />
 
-        <ApiResp {prom} />
+	<ApiResp {prom} />
 
-        <LogForm />
+	<LogForm />
 </main>
