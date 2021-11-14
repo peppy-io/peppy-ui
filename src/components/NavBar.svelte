@@ -23,29 +23,31 @@
 			>
 				About
 			</a>
-                        {#if $token !== ""}
-			<a
-				href="/dashboard"
-				class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
-			>
-				My Dashboard
-			</a>
-                        {/if}
+			{#if $token !== ''}
+				<a
+					href="/dashboard"
+					class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
+				>
+					My Dashboard
+				</a>
+			{/if}
 		</div>
 		<div>
-                        {#if $token === ""}
-			<a
-				href="/login"
-				class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black-900 hover:bg-blue-400 mt-4 lg:mt-0 transition-all duration-200"
-				>Login</a
-			>
-                        {:else}
-			<a
-				href="/logout"
-				class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black-900 hover:bg-blue-400 mt-4 lg:mt-0 transition-all duration-200"
-				>Logout</a
-			>
-                        {/if}
+			{#if $token === ''}
+				<a
+					sveltekit:prefetch
+					href="/login"
+					class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black-900 hover:bg-blue-400 mt-4 lg:mt-0 transition-all duration-200"
+					>Login</a
+				>
+			{:else}
+				<a
+					sveltekit:prefetch
+					href="/logout"
+					class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black-900 hover:bg-blue-400 mt-4 lg:mt-0 transition-all duration-200"
+					>Logout</a
+				>
+			{/if}
 		</div>
 	</div>
 </nav>
