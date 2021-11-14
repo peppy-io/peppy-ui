@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { token } from '../globals';
+	import { getReq } from '../helpers';
 	import { goto } from '$app/navigation';
 	import { Line } from 'svelte-chartjs';
+	import ApiResp from '../components/ApiResp.svelte';
+	import LogForm from '../components/LogForm.svelte';
 
 	// TODO: validate token from backend here
 	if ($token === '') {
 		goto('/login');
 	}
+
+        let prom = getReq('/energyLevels/day');
 
 	const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
 	const data = {
@@ -93,4 +98,8 @@
 	<!-- TODO: get data from api, form to log a task -->
 
 	<Line {data} {options} />
+
+        <ApiResp {prom} />
+
+        <LogForm />
 </main>
