@@ -2,6 +2,7 @@
 	import { postReq } from '../helpers';
 	import Error from '../components/Error.svelte';
 	import ApiResp from '../components/ApiResp.svelte';
+	import { DateTime } from 'luxon';
 
 	let errors = [];
 
@@ -21,19 +22,21 @@
 		minute: '2-digit',
 		hour12: false
 	});
-        let resp = null;
+	let resp = null;
 
 	function log() {
-		let datetime = new Date();
-		datetime = new Date(datetime.toDateString() + ' ' + timestamp);
-                const data = {
+		let datetime = DateTime.now();
+		datetime = datetime.set({ hour: timestamp.split(':')[0], minute: timestamp.split(':')[1] });
+		const data = {
 			energy_level: energyLevel.level,
 			event: event,
-			timestamp: datetime.toUTCString()
+			timestamp: datetime.toISO()
 		};
-                console.log("Logging", data);
+		console.log('Logging', data);
 		resp = postReq('/log', data);
 	}
+
+	export let callback = () => {};
 </script>
 
 <main class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 text-gray-50">
@@ -87,7 +90,7 @@
 
 			<Error {errors} />
 
-			<ApiResp prom={resp} />
+			<ApiResp prom={resp} {callback} />
 
 			<div>
 				<button

@@ -1,133 +1,125 @@
 <script lang="ts">
 	import { token } from '../globals';
-	import { getReq } from '../helpers';
 	import { goto } from '$app/navigation';
 	import { Chart, registerables } from 'chart.js';
 	import 'chartjs-adapter-luxon';
-	import { Line } from 'svelte-chartjs';
-	import ApiResp from '../components/ApiResp.svelte';
+        import ChartDataLabels from 'chartjs-plugin-datalabels';
 	import LogForm from '../components/LogForm.svelte';
-	import { DateTime } from 'luxon';
+	import Graph from '../components/Graph.svelte';
 
-	Chart.register(...registerables);
+	Chart.register(...registerables, ChartDataLabels);
 
 	// TODO: validate token from backend here
 	if ($token === '') {
 		goto('/login');
 	}
 
-	let prom = getReq('/energyLevels/day');
+	let graph1 = { updateGraph: () => {} };
+	let graph2 = { updateGraph: () => {} };
+	let graph3 = { updateGraph: () => {} };
+        let currentGraph = graph1;
 
-	let labels = [];
-	const data = {
-		labels: labels,
-		datasets: [
-			{
-				label: "Today's energy level",
-				backgroundColor: 'rgb(255, 99, 132)',
-				borderColor: 'rgb(255, 99, 132)',
-				data: [5, 10, -5, 0, 5, 10],
-				pointBorderWidth: 10,
-				pointHoverRadius: 5,
-				lineTension: 0.3,
-				color: '#fff'
-			},
-			{
-				label: 'Baseline',
-				data: Array(6).fill(0),
-				backgroundColor: 'rgb(100, 100, 100, 0.5)',
-				borderColor: 'rgb(100, 100, 100, 0.5)',
-				color: '#fff'
-			}
-		]
-	};
+	let selectedGraph = 'day';
 
-        // converts "2021-11-14 07:30:00 +0530" to "2021-11-14T07:30:00+0530"
-	function toISO(timestamp: string) {
-		return timestamp.replace(' ', 'T').replace(' ', '');
+	function changeGraph() {
+            console.log("Changing graph to", selectedGraph);
+            switch (selectedGraph) {
+                case 'day': currentGraph = graph1;
+                case 'month': currentGraph = graph2;
+                case 'all': currentGraph = graph3;
+            }
+            console.log(currentGraph);
 	}
 
-	prom.then(async (resp: any) => {
-		resp = await resp.json();
-		const lineData = [];
-		resp.forEach((log) => {
-			console.log(log);
-			labels.push(DateTime.fromISO(toISO(log.timestamp)));
-			lineData.push(log.energy_level);
-		});
-
-		data.labels = labels;
-		data.datasets[0].data = lineData;
-		data.datasets[1].data = Array(lineData.length).fill(0);
-		console.log(data);
-	});
-
-	const fontSize = 15;
-	const fontColor = 'white';
-
-	const options = {
-		responsive: true,
-		scales: {
-			x: {
-				ticks: {
-					color: fontColor
-				},
-				font: {
-					size: fontSize
-				},
-				title: {
-					color: fontColor
-				},
-				type: 'time',
-				/* time: { */
-				/* 	unit: 'hour' */
-				/* } */
-			},
-			y: {
-				ticks: {
-					color: fontColor
-				},
-				font: {
-					size: fontSize
-				},
-				title: {
-					color: fontColor
-				}
-			}
-		},
-		grid: {
-			font: {
-				size: fontSize
-			},
-			color: fontColor
-		},
-		title: {
-			font: {
-				size: fontSize
-			},
-			color: fontColor
-		},
-		plugins: {
-			legend: {
-				labels: {
-					font: {
-						size: fontSize
-					},
-					color: fontColor
-				}
-			}
-		}
-	};
+	function changeGraphTo(name: string) {
+		selectedGraph = name;
+                changeGraph();
+	}
 </script>
 
 <main class="md:container md:mx-auto px-4">
-	<h1 class="text-3xl">Your energy levels for today:</h1>
+	<div>
+		<div class="sm:hidden">
+			<label for="tabs" class="sr-only">Select a tab</label>
+			<!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
+			<select
+				id="tabs"
+				name="tabs"
+				class="block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+				bind:value={selectedGraph}
+				on:change={changeGraph}
+			>
+				<option selected value="day">Today</option>
 
-	<!-- TODO: get data from api, form to log a task -->
+				<option value="month">Last month</option>
 
-	<Line {data} {options} />
+				<option value="all">All time</option>
+			</select>
+		</div>
+		<div class="hidden sm:block">
+			<nav class="flex space-x-4" aria-label="Tabs">
+				<!-- Current: "bg-indigo-100 text-indigo-700", Default: "text-gray-500 hover:text-gray-700" -->
+				{#if selectedGraph == 'day'}
+					<button
+						class="bg-indigo-100 text-indigo-700 px-3 py-2 font-medium text-sm rounded-md"
+						on:click={() => changeGraphTo('day')}
+					>
+						Today
+					</button>
+				{:else}
+					<button
+						class="text-gray-500 hover:text-gray-700 px-3 py-2 font-medium text-sm rounded-md"
+						on:click={() => changeGraphTo('day')}
+					>
+						Today
+					</button>
+				{/if}
 
-	<ApiResp {prom} />
+				{#if selectedGraph == 'month'}
+					<button
+						class="bg-indigo-100 text-indigo-700 px-3 py-2 font-medium text-sm rounded-md"
+						on:click={() => changeGraphTo('month')}
+					>
+						Last month
+					</button>
+				{:else}
+					<button
+						class="text-gray-500 hover:text-gray-700 px-3 py-2 font-medium text-sm rounded-md"
+						on:click={() => changeGraphTo('month')}
+					>
+						Last month
+					</button>
+				{/if}
 
-	<LogForm />
+				{#if selectedGraph == 'all'}
+					<button
+						class="bg-indigo-100 text-indigo-700 px-3 py-2 font-medium text-sm rounded-md"
+						on:click={() => changeGraphTo('all')}
+					>
+						All time
+					</button>
+				{:else}
+					<button
+						class="text-gray-500 hover:text-gray-700 px-3 py-2 font-medium text-sm rounded-md"
+						on:click={() => changeGraphTo('all')}
+					>
+						All time
+					</button>
+				{/if}
+			</nav>
+		</div>
+	</div>
+
+	{#if selectedGraph == 'day'}
+		<h1 class="text-3xl">Your energy levels for today:</h1>
+		<Graph bind:this={graph1} endpoint={'/energyLevels/day'} name={"Today's energy levels"} />
+	{:else if selectedGraph == 'month'}
+		<h1 class="text-3xl">Your energy levels for the last month:</h1>
+		<Graph bind:this={graph2} endpoint={'/energyLevels/month'} name={"Last month's energy levels"} />
+	{:else if selectedGraph == 'all'}
+		<h1 class="text-3xl">Your energy levels:</h1>
+		<Graph bind:this={graph3} endpoint={'/energyLevels'} name={"All time energy levels"} />
+	{/if}
+
+	<LogForm callback={() => currentGraph.updateGraph()} />
 </main>
