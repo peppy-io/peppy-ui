@@ -45,6 +45,12 @@
 			<a href="https://iconscout.com/illustrations/jumping" target="_blank">Jumping Illustration</a>
 			on <a href="https://iconscout.com">Iconscout</a>
 		</li>
+		<li>
+			<a href="https://iconscout.com/illustrations/monk-stickman" target="_blank"
+				>Monk Stickman Illustration</a
+			>
+			on <a href="https://iconscout.com">Iconscout</a>
+		</li>
 	</ul>
 </main>
 

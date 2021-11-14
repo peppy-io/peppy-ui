@@ -34,7 +34,7 @@
 					padding: 3,
 					align: 'end',
 					anchor: 'end',
-                                        clamp: true,
+					clamp: true
 				}
 			},
 			{
@@ -57,6 +57,8 @@
 	}
 
 	let prom = null;
+	let finalEnergy = 0;
+	let count = 0;
 	let allData = [];
 	export function updateGraph() {
 		prom = getReq(endpoint);
@@ -71,6 +73,9 @@
 				energy += log.energy_level;
 				lineData.push(energy);
 			});
+			finalEnergy = energy;
+			count = resp.length;
+			console.log(finalEnergy, count);
 
 			data.labels = labels;
 			data.datasets[0].data = lineData;
@@ -136,3 +141,45 @@
 </script>
 
 <Line {data} {options} />
+
+{#if count <= 1}
+	<div class="flex flex-col items-center">
+		<p class="text-xl pt-10 pb-4">Try adding more events.</p>
+		<img class="illus" src="/monk-stickman.png" alt="A stickman monk meditating" />
+	</div>
+{:else if finalEnergy > 0 && finalEnergy < 10}
+	<div class="flex flex-col items-center">
+		<p class="text-xl pt-10 pb-4">You're doing alright. Keep it up!</p>
+		<img class="illus" src="/happy-stick-figure.png" alt="A happy stick figure" />
+	</div>
+{:else if finalEnergy >= 10}
+	<div class="flex flex-col items-center">
+		<p class="text-xl pt-10 pb-4">You can move mountains with all this energy!</p>
+		<img class="illus" src="/jumping.svg" alt="A vector illustration of a jumping man" />
+	</div>
+{:else if finalEnergy < 0 && finalEnergy >= -10}
+	<div class="flex flex-col items-center">
+		<p class="text-xl pt-10 pb-4">Not very good :( Try to take some rest.</p>
+		<img class="illus" src="/lazy-stickman-sleeping-on-office-desk.png" alt="A stickman sleeping on a work desk" />
+	</div>
+{:else if finalEnergy < -10}
+	<div class="flex flex-col items-center">
+		<p class="text-xl pt-10 pb-4">Don't overwork yourself. Take rest.</p>
+		<img class="illus" src="/employee-tired-and-battery-down.svg" alt="A tired man bending, with a low battery indictor on top of him." />
+	</div>
+{:else}
+	<div class="flex flex-col items-center">
+		<p class="text-xl pt-10 pb-4">Meh</p>
+		<img class="illus" src="/monk-stickman.png" alt="A stickman monk meditating" />
+	</div>
+{/if}
+
+<style>
+	.illus {
+		width: 40%;
+                min-height: 20em;
+		background-color: #ffffffdd;
+		color: #000;
+		@apply rounded-xl;
+	}
+</style>

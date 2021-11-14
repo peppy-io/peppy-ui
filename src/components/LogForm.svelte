@@ -42,7 +42,7 @@
 <main class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 text-gray-50">
 	<div class="max-w-md w-full space-y-8">
 		<div>
-			<h2 class="mt-6 text-center text-3xl font-extrabold">Log</h2>
+			<h2 class="mt-6 text-center text-3xl font-extrabold">Log an event</h2>
 		</div>
 		<form class="mt-8 space-y-6">
 			<input type="hidden" name="remember" value="true" />
