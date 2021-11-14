@@ -14,23 +14,12 @@
 		goto('/login');
 	}
 
-	let graph1 = { updateGraph: () => {} };
-	let graph2 = { updateGraph: () => {} };
-	let graph3 = { updateGraph: () => {} };
-	let currentGraph = graph1;
+	let currentGraph = { updateGraph: () => {console.log("graph not initialized aaa")} };
 
 	let selectedGraph = 'day';
 
 	function changeGraph() {
 		console.log('Changing graph to', selectedGraph);
-		switch (selectedGraph) {
-			case 'day':
-				currentGraph = graph1;
-			case 'month':
-				currentGraph = graph2;
-			case 'all':
-				currentGraph = graph3;
-		}
 		console.log(currentGraph);
 	}
 
@@ -120,17 +109,17 @@
 
 	{#if selectedGraph == 'day'}
 		<h1 class="text-2xl pb-10">Your energy levels for today:</h1>
-		<Graph bind:this={graph1} endpoint={'/energyLevels/day'} name={"Today's energy levels"} />
+		<Graph bind:this={currentGraph} endpoint={'/energyLevels/day'} name={"Today's energy levels"} />
 	{:else if selectedGraph == 'month'}
 		<h1 class="text-2xl pb-10">Your energy levels for the last month:</h1>
 		<Graph
-			bind:this={graph2}
+			bind:this={currentGraph}
 			endpoint={'/energyLevels/month'}
 			name={"Last month's energy levels"}
 		/>
 	{:else if selectedGraph == 'all'}
 		<h1 class="text-2xl pb-10">Your energy levels:</h1>
-		<Graph bind:this={graph3} endpoint={'/energyLevels'} name={'All time energy levels'} />
+		<Graph bind:this={currentGraph} endpoint={'/energyLevels'} name={'All time energy levels'} />
 	{/if}
 
 	<LogForm callback={() => currentGraph.updateGraph()} />
