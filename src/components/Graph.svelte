@@ -4,7 +4,7 @@
 	import 'chartjs-adapter-luxon';
 	import ChartDataLabels from 'chartjs-plugin-datalabels';
 	import { Line } from 'svelte-chartjs';
-	import { DateTime } from 'luxon';
+	import { DateTime, Settings } from 'luxon';
 
 	Chart.register(...registerables, ChartDataLabels);
 
@@ -69,7 +69,11 @@
 			labels = [];
 			let energy = 0;
 			resp.forEach((log) => {
-				labels.push(DateTime.fromISO(toISO(log.timestamp)));
+				let dt = DateTime.fromISO(toISO(log.timestamp), { setZone: true }).setZone(
+					Settings.defaultZone,
+					{ keepLocalTime: true }
+				);
+				labels.push(dt);
 				energy += log.energy_level;
 				lineData.push(energy);
 			});
@@ -160,12 +164,20 @@
 {:else if finalEnergy < 0 && finalEnergy >= -10}
 	<div class="flex flex-col items-center">
 		<p class="text-xl pt-10 pb-4">Not very good :( Try to take some rest.</p>
-		<img class="illus" src="/lazy-stickman-sleeping-on-office-desk.png" alt="A stickman sleeping on a work desk" />
+		<img
+			class="illus"
+			src="/lazy-stickman-sleeping-on-office-desk.png"
+			alt="A stickman sleeping on a work desk"
+		/>
 	</div>
 {:else if finalEnergy < -10}
 	<div class="flex flex-col items-center">
 		<p class="text-xl pt-10 pb-4">Don't overwork yourself. Take rest.</p>
-		<img class="illus" src="/employee-tired-and-battery-down.svg" alt="A tired man bending, with a low battery indictor on top of him." />
+		<img
+			class="illus"
+			src="/employee-tired-and-battery-down.svg"
+			alt="A tired man bending, with a low battery indictor on top of him."
+		/>
 	</div>
 {:else}
 	<div class="flex flex-col items-center">
@@ -177,7 +189,7 @@
 <style>
 	.illus {
 		width: 40%;
-                min-height: 20em;
+		min-height: 20em;
 		background-color: #ffffffdd;
 		color: #000;
 		@apply rounded-xl;
