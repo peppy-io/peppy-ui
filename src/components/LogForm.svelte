@@ -7,12 +7,12 @@
 	let errors = [];
 
 	const energyLevels = [
-		{ text: 'High increase', level: 3 },
-		{ text: 'Low increase', level: 2 },
-		{ text: 'Smol increase', level: 1 },
-		{ text: 'Smol decrease', level: -1 },
-		{ text: 'Low decrease', level: -2 },
-		{ text: 'High decrease', level: -3 }
+		{ text: '😄 Large increase in energy', level: 3 },
+		{ text: '😃 Increase in energy', level: 2 },
+		{ text: '🙂 Small increase in energy', level: 1 },
+		{ text: '😐 Small decrease in energy', level: -1 },
+		{ text: '😕 Decrease in energy', level: -2 },
+		{ text: '☹️  Large decrease in energy', level: -3 }
 	];
 
 	let energyLevel = energyLevels[0];
