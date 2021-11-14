@@ -41,13 +41,13 @@
 			✍️ You log how energetic or motivated you feel throughout the day. If something you did, like
 			attending a meeting or playing a game, made you gain/lose energy, add them to Peppy.
 		</div>
-		<img class="rounded-xl" src="/static/batteries.svg" alt="A person with various energy levels" />
+		<img class="rounded-xl" src="/batteries.svg" alt="A person with various energy levels" />
 	</div>
 
 	<div class="grid grid-cols-1 md:grid-cols-2 justify-items-center items-center content-center">
 		<img
 			class="rounded-xl"
-			src="/static/graphs.svg"
+			src="/graphs.svg"
 			alt="A vector illustration of a person looking at a graph"
 		/>
 		<div class="p-10 text-xl">
